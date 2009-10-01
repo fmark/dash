@@ -40,7 +40,7 @@ namespace Dash2
             _serialPort.Close();
         }
 
-        public decimal getThrottlePos()
+        public int GetThrottlePos()
         {
             sendData[2] = 0x20;
             sendData[6] = 0x81;
@@ -51,12 +51,12 @@ namespace Dash2
             return recvData[3] / 255;
         }
 
-        public decimal getBatteryCurrent()
+        public int GetBatteryCurrent()
         {
-            return 0m;
+            return 0;
         }
 
-        public decimal getDiodeTemp()
+        public int GetDiodeTemp()
         {
             sendData[2] = 0x2C;
             sendData[6] = 0x75;
@@ -72,12 +72,12 @@ namespace Dash2
             Console.WriteLine("Read values: 0->{0}, 1->{1}, 2->{2}, 3->{3}, 4->{4}, 5->{5}, 6->{6}",
                 recvData[0], recvData[1], recvData[2], recvData[3], recvData[4], recvData[5],
                 recvData[6]);
-            return 0.1m;
+            return 1;
         }
 
-        public decimal getBatteryVoltage()
+        public int GetBatteryVoltage()
         {
-            return 0.1m;
+            return 1;
         }
 
         public DataSourceError getErrorStatus()
@@ -85,9 +85,9 @@ namespace Dash2
             return DataSourceError.NoError;
         }
 
-        public decimal getOutputCurrent()
+        public int GetOutputCurrent()
         {
-            return 0.1m;
+            return 1;
         }
 
     }

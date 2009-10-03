@@ -24,13 +24,23 @@ namespace Bessie
         const int ZERO_DEGREES_COUNTS = 559;
         const float VOLTS_PER_COUNT = 0.1025f;
 
+        private string port = "COM1";
+
+        public ControllerDataSource(string port)
+        {
+            this.port = port;
+        }
+
+        public ControllerDataSource()
+        {
+        }
 
         public void InitDataSource()
         {
             _serialPort = new SerialPort();
 
             // Allow the user to set the appropriate properties.
-            _serialPort.PortName = "COM1";
+            _serialPort.PortName = port;
             _serialPort.BaudRate = 9600;
             _serialPort.Parity = Parity.None;
             _serialPort.DataBits = 8;
@@ -38,8 +48,8 @@ namespace Bessie
             _serialPort.Handshake = Handshake.None;
 
             // Set the read/write timeouts
-            _serialPort.ReadTimeout = 50000;
-            _serialPort.WriteTimeout = 50000;
+            _serialPort.ReadTimeout = 50;
+            _serialPort.WriteTimeout = 50;
 
             _serialPort.Open();
 
@@ -89,7 +99,13 @@ namespace Bessie
             _serialPort.Write(sendData, 0, 7);
             while (bytes_read < 7)
             {
-                bytes_read += _serialPort.Read(recvData, bytes_read, 7 - bytes_read);
+                try
+                {
+                    bytes_read += _serialPort.Read(recvData, bytes_read, 7 - bytes_read);
+                } catch (TimeoutException x) {
+                    System.Windows.Forms.DialogResult res;
+                    bytes_read = 7;               
+                }
             }
 
             if (!expectedMsg(recvData, type)) Console.WriteLine("Bad read !!{0:x2}.", type);

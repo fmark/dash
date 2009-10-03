@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -23,7 +20,14 @@ namespace Bessie
 
         private void UI_Load(object sender, EventArgs e)
         {
-            alltrax = new ControllerDataSource();
+            if (Environment.GetCommandLineArgs().Length > 1)
+            {
+                alltrax = new ControllerDataSource(Environment.GetCommandLineArgs()[1]);
+            }
+            else
+            {
+                alltrax = new ControllerDataSource();
+            }
             alltrax.InitDataSource();
             updateLabels();
         }
@@ -54,6 +58,25 @@ namespace Bessie
             {
                 Application.Exit();
             }
+            else if (e.KeyCode == Keys.F1)
+            {
+                alltrax.CloseDataSource();
+                alltrax = new TestDataSource();
+                alltrax.InitDataSource();
+                updateLabels();
+            }
+            else if (e.KeyCode == Keys.F2)
+            {
+                alltrax.CloseDataSource();
+                alltrax = new ControllerDataSource();
+                alltrax.InitDataSource();
+                updateLabels();
+            }
+        }
+
+        private void temp_Click(object sender, EventArgs e)
+        {
+
         }
 
 

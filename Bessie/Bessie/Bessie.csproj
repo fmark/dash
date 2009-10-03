@@ -48,6 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ControllerDataSource.cs" />
+    <Compile Include="DataSource.cs" />
+    <Compile Include="TestDataSource.cs" />
     <Compile Include="UI.cs">
       <SubType>Form</SubType>
     </Compile>

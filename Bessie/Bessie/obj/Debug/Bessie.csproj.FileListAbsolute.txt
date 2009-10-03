@@ -1,4 +1,0 @@
-C:\Documents and Settings\Olly-Smack-PC\Local Settings\Application Data\Temporary Projects\Bessie\obj\Debug\ResolveAssemblyReference.cache
-C:\Documents and Settings\Olly-Smack-PC\Local Settings\Application Data\Temporary Projects\Bessie\obj\Debug\Bessie.UI.resources
-C:\Documents and Settings\Olly-Smack-PC\Local Settings\Application Data\Temporary Projects\Bessie\obj\Debug\Bessie.Properties.Resources.resources
-C:\Documents and Settings\Olly-Smack-PC\Local Settings\Application Data\Temporary Projects\Bessie\obj\Debug\Bessie.csproj.GenerateResource.Cache

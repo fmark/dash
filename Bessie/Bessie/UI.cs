@@ -79,6 +79,13 @@ namespace Bessie
 
         }
 
+        private void UI_Resize(object sender, EventArgs e)
+        {
+            panel1.Location = new Point(
+                (this.Size.Width - panel1.Size.Width) / 2,
+                (this.Size.Height - panel1.Size.Height) / 2);
+        }
+
 
     }
 }

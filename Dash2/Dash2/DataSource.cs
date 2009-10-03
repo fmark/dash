@@ -7,12 +7,12 @@ namespace Dash2
         void InitDataSource();
         void CloseDataSource();
 
-       int GetThrottlePos(); //percentage
-        int GetDiodeTemp();   //Error range <= -25C and >= 95C. Likely range is -10C - 85C
-        int GetBatteryVoltage(); //Around 55 - 90V???
+        float GetThrottlePos(); //percentage
+        float GetDiodeTemp();   //Error range <= -25C and >= 95C. Likely range is -10C - 85C
+        float GetBatteryVoltage(); //Around 55 - 90V???
         DataSourceError getErrorStatus();  //See below.
-        int GetOutputCurrent(); //amps.  0-400amps
-        int GetBatteryCurrent(); //amps.  0-400amps
+        float GetOutputCurrent(); //amps.  0-400amps
+        float GetBatteryCurrent(); //amps.  0-400amps
     }
 
     public enum DataSourceError

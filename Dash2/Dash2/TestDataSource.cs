@@ -24,7 +24,7 @@ namespace Dash2
         }
 
 		private bool isTPosAsc = true;
-        public int GetThrottlePos()
+        public float GetThrottlePos()
         {
             if (isTPosAsc) lastThrottlePos += 3;
 			else lastThrottlePos -= 3; 
@@ -36,7 +36,7 @@ namespace Dash2
         }
 
 		private bool isBCurAsc = true;
-        public int GetBatteryCurrent()
+        public float GetBatteryCurrent()
         {
             if (isBCurAsc) lastBatteryCurrent += 3;
 			else lastBatteryCurrent -= 3; 
@@ -48,7 +48,7 @@ namespace Dash2
         }
 
 		private bool isDTempAsc = true;
-        public int GetDiodeTemp()
+        public float GetDiodeTemp()
         {
              if (isDTempAsc) lastDiodeTemp += 1;
 			else lastDiodeTemp -= 1; 
@@ -59,7 +59,7 @@ namespace Dash2
 			return lastDiodeTemp;
         }
 
-        public int GetBatteryVoltage()
+        public float GetBatteryVoltage()
         {
 			if (lastBatteryVoltage <= 55) lastBatteryVoltage = 60;
 			else if (lastBatteryVoltage >= 92) lastBatteryVoltage = 88;
@@ -92,7 +92,7 @@ namespace Dash2
         }
 
 		private bool isOCurAsc = true;
-        public int GetOutputCurrent()
+        public float GetOutputCurrent()
         {
              if (isOCurAsc) lastOutputCurrent += 5;
 			else lastOutputCurrent -= 2; 

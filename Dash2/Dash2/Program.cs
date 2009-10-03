@@ -18,16 +18,33 @@ namespace Dash2
         data = new ControllerDataSource();
 		//data = new TestDataSource();
         data.InitDataSource();
-        
-        Console.WriteLine("Type QUIT to exit");
+        for (int i = 0; i < 5; i++)
+        {
+            int time1 = System.Environment.TickCount;
+            int c = 0;
+            while (System.Environment.TickCount < time1 + 1000 * 10)
+            {
+                data.GetThrottlePos();
+                data.GetDiodeTemp();
+                data.GetBatteryVoltage();
+                data.GetOutputCurrent();
+                data.GetBatteryCurrent();
+                data.getErrorStatus();
+                c++;
+            }
+            Console.WriteLine("Hello {0}", (float)c / 10f);
+            
+        }
+        Console.Read();
+/*        Console.WriteLine("Type QUIT to exit");
         while (_continue)
         {
-            Console.WriteLine("Throttle position: {0}%", data.GetThrottlePos());
-            Console.WriteLine("Diode temperature: {0} degrees C", data.GetDiodeTemp());
-            Console.WriteLine("Battery voltage: {0} V", data.GetBatteryVoltage());
-            Console.WriteLine("Battery current: {0}", data.GetBatteryCurrent());
-			Console.WriteLine("Output current: {0}", data.GetOutputCurrent());
-			Console.WriteLine("Current error: {0}", data.getErrorStatus());	
+            Console.WriteLine("Throttle position: {0:N1}%", data.GetThrottlePos());
+            Console.WriteLine("Diode temperature: {0:N1} degrees C", data.GetDiodeTemp());
+            Console.WriteLine("Battery voltage: {0:N1} V", data.GetBatteryVoltage());
+            Console.WriteLine("Battery current: {0:N1} anps", data.GetBatteryCurrent());
+            Console.WriteLine("Output current: {0:N1} amps", data.GetOutputCurrent());
+			Console.WriteLine("Error status: {0}", data.getErrorStatus());	
             message = Console.ReadLine();
 
             if (stringComparer.Equals("quit", message) || stringComparer.Equals("q", message))
@@ -35,6 +52,8 @@ namespace Dash2
                 _continue = false;
             }
         }
+ * */
+
         data.CloseDataSource();
     }
     }

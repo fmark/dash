@@ -17,8 +17,13 @@ namespace Dash2
 
     public enum DataSourceError
     {
-        ThrottlePosOverRange, UnderTemp, ThrottleNotGoneZero,
-        OverTemp, BatteryUnderVoltage, BatteryOverVoltage, NoError
+        NoError = 0,
+        ThrottlePosOverRange = 1, 
+        UnderTemp = 2, 
+        ThrottleNotGoneZero = 3,
+        OverTemp = 4, 
+        BatteryUnderVoltage = 6, 
+        BatteryOverVoltage = 7 
     }
 
    /*

@@ -18,9 +18,12 @@ namespace Dash2
         const byte DIODE_TEMP_CSUM = 0x75;
         const byte BATT_VOLT_AND_ERR = 0x39;
         const byte BATT_VOLT_AND_ERR_CSUM = 0x68;
+        const byte OUTPUT_CURRENT = 0x60;
+        const byte OUTPUT_CURRENT_CSUM = 0x41;
 
         const int ZERO_DEGREES_COUNTS = 559;
         const float VOLTS_PER_COUNT = 0.1025f;
+
 
         public void InitDataSource()
         {
@@ -52,20 +55,14 @@ namespace Dash2
             _serialPort.Close();
         }
 
+        private float lastThrottlePos = 0;
         public float GetThrottlePos()
         {
             sendData[2] = THROTTLE_POS;
             sendData[6] = THROTTLE_POS_CSUM;
-
-            _serialPort.Write(sendData, 0, 7);
-            _serialPort.Read(recvData, 0, 7);
-
-            return (float)recvData[3] / 255f;
-        }
-
-        public float GetBatteryCurrent()
-        {
-            return 0;
+            readWriteLoop(THROTTLE_POS);
+            lastThrottlePos = (float)recvData[3] / 0xff;
+            return lastThrottlePos;
         }
 
         private void printBytes(byte[] b)
@@ -84,63 +81,81 @@ namespace Dash2
             return true;
         }
 
+        public void readWriteLoop(int type)
+        {
+            int bytes_read = 0;
+
+            // Console.WriteLine("Sending {0:x2}", type);
+            _serialPort.Write(sendData, 0, 7);
+            while (bytes_read < 7)
+            {
+                bytes_read += _serialPort.Read(recvData, bytes_read, 7 - bytes_read);
+            }
+
+            if (!expectedMsg(recvData, type)) Console.WriteLine("Bad read !!{0:x2}.", type);
+        }
+
         public float GetDiodeTemp()
         {
             sendData[2] = DIODE_TEMP;
             sendData[6] = DIODE_TEMP_CSUM;
 
-            _serialPort.Write(sendData, 0, 7);
+            readWriteLoop(DIODE_TEMP);
 
-            _serialPort.Read(recvData, 0, 7);
-
-            if (expectedMsg(recvData, DIODE_TEMP))
-            {
-                int counts = (recvData[4] << 8) + recvData[3];
-                
-                return (float)(counts - ZERO_DEGREES_COUNTS) / 2.048f;
-            }
-            else
-            {
-                return -99;
-            }
-            
+            int counts = (recvData[4] << 8) + recvData[3];
+            return (float)(counts - ZERO_DEGREES_COUNTS) / 2.048f;          
         }
 
-        public float GetBatteryVoltage()
+        private bool voltNeedsUpdate = true;
+        private bool errNeedsUpdate = true;
+
+        private void updateVoltageAndError()
         {
             sendData[2] = BATT_VOLT_AND_ERR;
             sendData[6] = BATT_VOLT_AND_ERR_CSUM;
 
-            Console.WriteLine("Writing values:");
-            printBytes(sendData);
+            readWriteLoop(BATT_VOLT_AND_ERR);
 
-            _serialPort.Write(sendData, 0, 7);
+            voltNeedsUpdate = false;
+            errNeedsUpdate = false;
+        }
 
-            _serialPort.Read(recvData, 0, 7);
-
-            Console.WriteLine("Reading values:");
-            printBytes(recvData);
-
-            if (expectedMsg(recvData, BATT_VOLT_AND_ERR))
-            {
-                int counts = (recvData[4] << 8) + recvData[3];
-                return counts * VOLTS_PER_COUNT;
+        public float GetBatteryVoltage()
+        {
+            if (voltNeedsUpdate) {
+                updateVoltageAndError();
             }
-            else
-            {
-                return -99;
-            }
+            voltNeedsUpdate = true;
+            int counts = (recvData[4] << 8) + recvData[3];
+            return counts * VOLTS_PER_COUNT;
         }
 
         public DataSourceError getErrorStatus()
         {
-            return DataSourceError.NoError;
+            if (errNeedsUpdate)
+            {
+                updateVoltageAndError();
+            }
+            errNeedsUpdate = true;
+
+            return (DataSourceError)recvData[5];
         }
 
+        private float lastOutputCurrent = 0;
         public float GetOutputCurrent()
         {
-            return 1;
+            sendData[2] = OUTPUT_CURRENT;
+            sendData[6] = OUTPUT_CURRENT_CSUM;
+
+            readWriteLoop(OUTPUT_CURRENT);
+
+            lastOutputCurrent = (recvData[4] << 8) + recvData[3];
+            return lastOutputCurrent;    
         }
 
+        public float GetBatteryCurrent()
+        {
+            return lastThrottlePos * lastOutputCurrent;
+        }
     }
 }

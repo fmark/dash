@@ -1,4 +1,4 @@
-
+using System.Threading;
 using System;
 
 namespace Bessie
@@ -54,6 +54,7 @@ namespace Bessie
 		private bool isDTempAsc = true;
         public float GetDiodeTemp()
         {
+			Thread.Sleep(80);
              if (isDTempAsc) lastDiodeTemp += 1;
 			else lastDiodeTemp -= 1; 
 			
@@ -61,6 +62,7 @@ namespace Bessie
 			else if (lastDiodeTemp <= 75) isDTempAsc = true;
 			
 			return lastDiodeTemp;
+			
         }
 
         public float GetBatteryVoltage()

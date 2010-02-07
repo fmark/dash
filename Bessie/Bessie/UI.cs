@@ -47,6 +47,7 @@ namespace Bessie
 				com = "";
             }
 			alltraxThread = new Thread(unused => runAlltraxThread(com, dummyVersion));
+			lock(finishedLock) finished = false;
 			alltraxThread.Start();
 			repaint = true;
 			updateLabels();
@@ -119,7 +120,7 @@ namespace Bessie
 			float throttlePosCp;
 			Exception exp;
 			
-			//if (!repaint) return;
+			if (!repaint) return;
 
 			//Get instrument data in lock, as it
 			//can be updated by another thread.
@@ -183,20 +184,24 @@ namespace Bessie
                 finishAndWaitForThreads();
 				Application.Exit();
             }
-          /*  else if (e.KeyCode == Keys.F1)
+           else if (e.KeyCode == Keys.F1)
             {
-                alltrax.CloseDataSource();
-                alltrax = new TestDataSource();
-                alltrax.InitDataSource();
+                System.Console.WriteLine("Starting dummy.");
+				repaint = false;
+				finishAndWaitForThreads();
+				System.Console.WriteLine("Killed current, starting new.");
+				startAlltrax(true);
+				repaint = true;
                 updateLabels();
             }
-            else if (e.KeyCode == Keys.F2)
+           else if (e.KeyCode == Keys.F2)
             {
-                alltrax.CloseDataSource();
-                alltrax = new ControllerDataSource();
-                alltrax.InitDataSource();
+                repaint = false;
+				finishAndWaitForThreads();
+				startAlltrax(false);
+				repaint = true;
                 updateLabels();
-            }*/
+            }
         }
 
 

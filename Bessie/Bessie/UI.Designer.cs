@@ -238,7 +238,8 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Bessie";
             this.TopMost = true;
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+//            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+			this.WindowState = System.Windows.Forms.FormWindowState.Normal;
             this.Load += new System.EventHandler(this.UI_Load);
             this.Resize += new System.EventHandler(this.UI_Resize);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.UI_KeyDown);

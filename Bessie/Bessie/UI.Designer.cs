@@ -50,7 +50,7 @@
             // timer
             // 
             this.timer.Enabled = true;
-            this.timer.Interval = 1000;
+            this.timer.Interval = 100;
             this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
             // panel1
@@ -240,7 +240,6 @@
             this.TopMost = true;
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.UI_Load);
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.UI_FormClosed);
             this.Resize += new System.EventHandler(this.UI_Resize);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.UI_KeyDown);
             this.panel1.ResumeLayout(false);

@@ -13,6 +13,10 @@ namespace Bessie
 		
 		private Random rng = new Random();
 		
+		public TestDataSource()
+        {
+        }
+		
         public void InitDataSource()
         {
 			; // do nothing!

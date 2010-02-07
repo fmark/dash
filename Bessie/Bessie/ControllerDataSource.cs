@@ -50,7 +50,6 @@ namespace Bessie
             // Set the read/write timeouts
             _serialPort.ReadTimeout = 50;
             _serialPort.WriteTimeout = 50;
-
             _serialPort.Open();
 
             sendData[0] = SEND_FLAG;
@@ -99,13 +98,7 @@ namespace Bessie
             _serialPort.Write(sendData, 0, 7);
             while (bytes_read < 7)
             {
-                try
-                {
                     bytes_read += _serialPort.Read(recvData, bytes_read, 7 - bytes_read);
-                } catch (TimeoutException x) {
-                    System.Windows.Forms.DialogResult res;
-                    bytes_read = 7;               
-                }
             }
 
             if (!expectedMsg(recvData, type)) Console.WriteLine("Bad read !!{0:x2}.", type);

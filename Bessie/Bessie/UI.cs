@@ -34,7 +34,10 @@ namespace Bessie
         
         public UI()
         {
-            InitializeComponent();
+	        InitializeComponent();
+			this.StartPosition = FormStartPosition.Manual;
+			this.Location = new Point(1024, 0);
+			this.Size = new Size(800, 600);
         }
 
 		private void startAlltrax(bool dummyVersion){
@@ -55,7 +58,14 @@ namespace Bessie
 		
         private void UI_Load(object sender, EventArgs e)
         {
-			startAlltrax(false);	
+			startAlltrax(false);
+        }
+		
+		private void UI_Closed(object sender, EventArgs e)
+        {
+			if (alltraxThread.IsAlive) {
+				finishAndWaitForThreads();	
+			}
         }
 		
 		private void runAlltraxThread(object com, object dummy_data){
@@ -104,10 +114,12 @@ namespace Bessie
 					lock(finishedLock) finCp = finished;
 				}
 				alltrax.CloseDataSource();
+			//If there is an exception, signal that to the GUI
+			//thread and then terminate this one.
 			} catch (Exception e){
 				lock (alltraxLock) alltraxExp = e;
 			}
-			System.Console.WriteLine("Terminating worker thread.");
+//			System.Console.WriteLine("Terminating worker thread.");
 		}
 
         private void updateLabels()
@@ -146,7 +158,8 @@ namespace Bessie
 			} else {
 				repaint = false;
 				if (exp is System.IO.IOException){
-					if (MessageBox.Show("Cannot read from the COM port.  Switching to dummy data.", 
+					if (MessageBox.Show("Cannot find alltrax device on COM port.  Switching to dummy data.\n" +
+					                    "Press [F2] at a later time to retry.", 
 					                "IO Error.", 
 					                MessageBoxButtons.OKCancel, 
 					                MessageBoxIcon.Error) == DialogResult.OK){
@@ -155,7 +168,7 @@ namespace Bessie
 						startAlltrax(true);
 						repaint = true;
 					} else {
-						System.Environment.Exit(1);
+						System.Environment.Exit(0);
 					}				
 
 				} else {
@@ -169,11 +182,28 @@ namespace Bessie
         {
             // update
             updateLabels();
+			panel2.Invalidate();
         }
+		
+		
+		void panel2_Paint(object sender, PaintEventArgs e) {
+			// now paint image
+			Pen p = new Pen(System.Drawing.Color.Azure);
+			
+			
+			int x = 0, y = 0, h = 600, w = 600;
+			while (h > 0){
+				e.Graphics.DrawEllipse(p, x, y, w, h);
+				x++; 
+				y++;
+				h -= 2;
+				w -= 2;
+			}
+			p.Dispose();			                    
+		}
 
 		private void finishAndWaitForThreads(){
 			lock(finishedLock) finished = true;
-			System.Console.Out.Flush();
 			alltraxThread.Join();
 		}
 		
@@ -186,10 +216,8 @@ namespace Bessie
             }
            else if (e.KeyCode == Keys.F1)
             {
-                System.Console.WriteLine("Starting dummy.");
 				repaint = false;
 				finishAndWaitForThreads();
-				System.Console.WriteLine("Killed current, starting new.");
 				startAlltrax(true);
 				repaint = true;
                 updateLabels();
@@ -208,8 +236,14 @@ namespace Bessie
         private void UI_Resize(object sender, EventArgs e)
         {
             panel1.Location = new Point(
-                (this.Size.Width - panel1.Size.Width) / 2,
-                (this.Size.Height - panel1.Size.Height) / 2);
+                (this.Size.Width - 480) / 2,
+                (this.Size.Height - 480) / 2);
+			panel1.Size = new Size(480, 480);
+			/*System.Console.WriteLine(panel1.Size.Width);
+			System.Console.WriteLine(this.Size.Height);
+			System.Console.WriteLine(panel1.Size.Height);
+			System.Console.WriteLine();*/
+			panel1.BackColor = System.Drawing.Color.Bisque;
         }
 
 

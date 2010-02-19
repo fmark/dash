@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI));
             this.timer = new System.Windows.Forms.Timer(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
+			this.panel2 = new DoubleBufferedPanel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.batterycurrent = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
@@ -44,6 +45,7 @@
             this.throttle = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
+			this.panel2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -60,6 +62,17 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(480, 480);
             this.panel1.TabIndex = 0;
+			this.panel1.Visible = false;
+            // 
+            // panel2
+            // 
+            this.panel2.Location = new System.Drawing.Point(0, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel2.BackColor = System.Drawing.Color.Black;
+            this.panel2.TabIndex = 1;
+			this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
+			
             // 
             // tableLayoutPanel1
             // 
@@ -228,22 +241,25 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.ClientSize = new System.Drawing.Size(480, 480);
+            this.ClientSize = new System.Drawing.Size(800, 600);
             this.Controls.Add(this.panel1);
+			this.Controls.Add(this.panel2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(480, 480);
+            this.MinimumSize = new System.Drawing.Size(800, 600);
             this.Name = "UI";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Bessie";
             this.TopMost = true;
-//            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            //this.WindowState = System.Windows.Forms.FormWindowState.Normal;
 			this.WindowState = System.Windows.Forms.FormWindowState.Normal;
             this.Load += new System.EventHandler(this.UI_Load);
+			this.Closed += new System.EventHandler(this.UI_Closed);
             this.Resize += new System.EventHandler(this.UI_Resize);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.UI_KeyDown);
             this.panel1.ResumeLayout(false);
+			this.panel2.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
@@ -254,6 +270,7 @@
 
         private System.Windows.Forms.Timer timer;
         private System.Windows.Forms.Panel panel1;
+		private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label batterycurrent;
         private System.Windows.Forms.Label label9;

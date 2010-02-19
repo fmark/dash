@@ -187,19 +187,20 @@ namespace Bessie
 		
 		
 		void panel2_Paint(object sender, PaintEventArgs e) {
+			Graphics g = e.Graphics;
+			g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 			// now paint image
 			Pen p = new Pen(System.Drawing.Color.Azure);
+			Brush b = new SolidBrush(System.Drawing.Color.Red);
 			
+			int y = 1;
+			int h = this.panel2.Height - y;
+			int w = h;
+			int x = (this.panel2.Width - w) / 2;
 			
-			int x = 0, y = 0, h = 600, w = 600;
-			while (h > 0){
-				e.Graphics.DrawEllipse(p, x, y, w, h);
-				x++; 
-				y++;
-				h -= 2;
-				w -= 2;
-			}
-			p.Dispose();			                    
+			g.FillEllipse(b, x, y, w, h);
+			p.Dispose();	
+			b.Dispose();
 		}
 
 		private void finishAndWaitForThreads(){
